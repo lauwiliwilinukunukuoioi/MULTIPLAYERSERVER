@@ -9,8 +9,8 @@ const msgType = {
     CREATE_HOST: 0,
 	JOIN_HOST: 1,
 	STOP_HOST: 2,
-    SET_PLAYER_STAT: 3
-
+    SET_PLAYER_STAT: 3,
+    GET_HOSTS: 4
 }
 
 function player(x,y){
@@ -32,7 +32,9 @@ server.on("message", function(msg, rinfo){
         case msgType.STOP_HOST:
             stop_host(data,rinfo);
             break;
-        
+        case msgType.GET_HOSTS:
+            get_hosts(data,rinfo);
+            break;
     
         default:
             break;
@@ -65,6 +67,12 @@ function stop_host(data, rinfo){
     data.res = "stoped";
     server.send(JSON.stringify(data), rinfo.port, rinfo.address);
     console.table(hosts);
+}
+
+function get_hosts(data, rinfo){
+    console.log("get_hosts function");
+    data.hosts = hosts;
+    server.send(JSON.stringify(data), rinfo.port, rinfo.address);
 }
 
 server.bind(8080);
