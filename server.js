@@ -10,7 +10,8 @@ const msgType = {
 	JOIN_HOST: 1,
 	STOP_HOST: 2,
     SET_PLAYER_STAT: 3,
-    GET_HOSTS: 4
+    GET_HOSTS: 4,
+    GET_PLAYER_STAT: 5
 }
 
 function player(player_number ,x,y){
@@ -38,6 +39,9 @@ server.on("message", function(msg, rinfo){
         case msgType.JOIN_HOST:
             join_host(data,rinfo);
             break;
+        case msgType.GET_PLAYER_STAT:
+            get_player_stat(data,rinfo);
+            break;
     
         default:
             break;
@@ -46,10 +50,6 @@ server.on("message", function(msg, rinfo){
 
 function set_player_stat(data,rinfo){
     console.log("set_player_stat function")
-    console.log(data.hostnumber)
-    console.log(data.playernumber)
-    console.log(data.x)
-    console.log(data.y)
     hosts[data.hostnumber][data.playernumber].x = data.x
     hosts[data.hostnumber][data.playernumber].y = data.y
 }
@@ -89,6 +89,12 @@ function join_host(data, rinfo){
     data.playernumber = number_of_players;
     server.send(JSON.stringify(data), rinfo.port, rinfo.address);
     console.table(hosts);
+}
+
+function get_player_stat(data, rinfo){
+    console.log("get_player_stat function");
+    data.playerstat = hosts[data.hostnumber][data.playernumber];
+    server.send(JSON.stringify(data), rinfo.port, rinfo.address);
 }
 
 server.bind(8080);
