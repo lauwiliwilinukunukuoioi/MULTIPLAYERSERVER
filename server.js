@@ -11,7 +11,8 @@ const msgType = {
 	STOP_HOST: 2,
     SET_PLAYER_STAT: 3,
     GET_HOSTS: 4,
-    GET_PLAYER_STAT: 5
+    GET_PLAYER_STAT: 5,
+    GET_NEW_PLAYERS: 6
 }
 
 function player(player_number ,x,y){
@@ -41,6 +42,9 @@ server.on("message", function(msg, rinfo){
             break;
         case msgType.GET_PLAYER_STAT:
             get_player_stat(data,rinfo);
+            break;
+        case msgType.GET_NEW_PLAYERS:
+            get_players(data,rinfo);
             break;
     
         default:
@@ -94,6 +98,12 @@ function join_host(data, rinfo){
 function get_player_stat(data, rinfo){
     console.log("get_player_stat function");
     data.playerstat = hosts[data.hostnumber][data.playernumber];
+    server.send(JSON.stringify(data), rinfo.port, rinfo.address);
+}
+
+function get_players(data, rinfo){
+    console.log("get_players function");
+    data.players = hosts[data.hostnumber];
     server.send(JSON.stringify(data), rinfo.port, rinfo.address);
 }
 
