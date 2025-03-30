@@ -46,14 +46,18 @@ server.on("message", function(msg, rinfo){
 
 function set_player_stat(data,rinfo){
     console.log("set_player_stat function")
-
-    
+    console.log(data.hostnumber)
+    console.log(data.playernumber)
+    console.log(data.x)
+    console.log(data.y)
+    hosts[data.hostnumber][data.playernumber].x = data.x
+    hosts[data.hostnumber][data.playernumber].y = data.y
 }
 
 function create_host(data,rinfo){
     console.log("create_host function")
     var hostNumber = hosts.length;
-    hosts.push([new player(0, 0,0)]);
+    hosts.push([new player(0, 0, 0)]);
 
     data.hostNumber = hostNumber;
     data.playerNumber = 0;
