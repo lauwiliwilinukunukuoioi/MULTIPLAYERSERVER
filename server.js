@@ -13,10 +13,10 @@ const msgType = {
     GET_HOSTS: 4
 }
 
-function player(x,y){
+function player(player_number ,x,y){
     this.x = x;
     this.y = y;
-
+    this.player_number = this.player_number;
 }
 
 server.on("message", function(msg, rinfo){
@@ -35,6 +35,9 @@ server.on("message", function(msg, rinfo){
         case msgType.GET_HOSTS:
             get_hosts(data,rinfo);
             break;
+        case msgType.JOIN_HOST:
+            join_host(data,rinfo);
+            break;
     
         default:
             break;
@@ -50,7 +53,7 @@ function set_player_stat(data,rinfo){
 function create_host(data,rinfo){
     console.log("create_host function")
     var hostNumber = hosts.length;
-    hosts.push([new player(0,0)]);
+    hosts.push([new player(0, 0,0)]);
 
     data.hostNumber = hostNumber;
     data.playerNumber = 0;
@@ -73,6 +76,15 @@ function get_hosts(data, rinfo){
     console.log("get_hosts function");
     data.hosts = hosts;
     server.send(JSON.stringify(data), rinfo.port, rinfo.address);
+}
+
+function join_host(data, rinfo){
+    console.log("join_host function");
+    var number_of_players = hosts[data.hostnumber].length
+    hosts[data.hostnumber].push(new player(number_of_players, 0 , 0));
+    data.playernumber = number_of_players;
+    server.send(JSON.stringify(data), rinfo.port, rinfo.address);
+    console.table(hosts);
 }
 
 server.bind(8080);
