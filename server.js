@@ -18,7 +18,7 @@ const msgType = {
 function player(player_number ,x,y){
     this.x = x;
     this.y = y;
-    this.player_number = this.player_number;
+    this.player_number = player_number;
 }
 
 server.on("message", function(msg, rinfo){
